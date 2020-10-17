@@ -21,6 +21,7 @@ router.post('/users', async (req, res) => {
 });
 
 router.post('/users/photo/:id', upload('users').single('file'), async (req, res, next) => {
+
   const { file } = req;
   const userId = req.params.id;
   try {
@@ -35,7 +36,7 @@ router.post('/users/photo/:id', upload('users').single('file'), async (req, res,
     const cloudPath =  `${file.path}`.replace(/\\/g,"/")
     await cloudinary.uploader.upload(cloudPath, { folder: "cinema/"},)
             .then((result) => {
-              user.image = result.url
+              user.imageurl = result.url
               user.save();
             })
     res.send({ user, file });
