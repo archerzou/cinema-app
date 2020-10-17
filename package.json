@@ -1,0 +1,21 @@
+{
+  "name": "cinema",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/src/index.js",
+  "engines": {
+    "node": "10.16.3"
+  },
+  "scripts": {
+    "start": "cd server && npm install && npm start",
+    "client": "cd client && npm start",
+    "server": "cd server && npm run dev",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/archerzou/cinema-app.git"
+  },
+  "author": "Archer Zou",
+  "license": "MIT"
+}
