@@ -2,6 +2,10 @@ import palette from '../../../../../theme/palette';
 
 export const data = {
   labels: ['1 Aug', '2 Aug', '3 Aug', '4 Aug', '5 Aug', '6 Aug'],
+  barThickness: 12,
+  maxBarThickness: 10,
+  barPercentage: 0.5,
+  categoryPercentage: 0.5,
   datasets: [
     {
       label: 'This year',
@@ -37,10 +41,6 @@ export const options = {
   scales: {
     xAxes: [
       {
-        barThickness: 12,
-        maxBarThickness: 10,
-        barPercentage: 0.5,
-        categoryPercentage: 0.5,
         ticks: {
           fontColor: palette.text.secondary
         },

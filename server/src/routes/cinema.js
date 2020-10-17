@@ -3,6 +3,7 @@ const auth = require('../middlewares/auth');
 const upload = require('../utils/multer');
 const Cinema = require('../models/cinema');
 const userModeling = require('../utils/userModeling');
+const cloudinary = require('../utils/cloudinary');
 
 const router = new express.Router();
 
@@ -18,7 +19,6 @@ router.post('/cinemas', auth.enhance, async (req, res) => {
 });
 
 router.post('/cinemas/photo/:id', upload('cinemas').single('file'), async (req, res, next) => {
-  const url = `${req.protocol}://${req.get('host')}`;
   const { file } = req;
   const movieId = req.params.id;
   try {
@@ -29,8 +29,12 @@ router.post('/cinemas/photo/:id', upload('cinemas').single('file'), async (req, 
     }
     const cinema = await Cinema.findById(movieId);
     if (!cinema) return res.sendStatus(404);
-    cinema.image = `${url}/${file.path}`.replace(/\\/g,"/");
-    await cinema.save();
+    const cloudPath =  `${file.path}`.replace(/\\/g,"/")
+      await cloudinary.uploader.upload(cloudPath, { folder: "cinema/"},)
+            .then((result) => {
+              cinema.image = result.url
+              cinema.save();
+            })
     res.send({ cinema, file });
   } catch (e) {
     console.log(e);

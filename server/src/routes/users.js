@@ -2,6 +2,7 @@ const express = require('express');
 const upload = require('../utils/multer');
 const User = require('../models/user');
 const auth = require('../middlewares/auth');
+const cloudinary = require('../utils/cloudinary');
 
 const router = new express.Router();
 
@@ -20,7 +21,6 @@ router.post('/users', async (req, res) => {
 });
 
 router.post('/users/photo/:id', upload('users').single('file'), async (req, res, next) => {
-  const url = `${req.protocol}://${req.get('host')}`;
   const { file } = req;
   const userId = req.params.id;
   try {
@@ -31,8 +31,13 @@ router.post('/users/photo/:id', upload('users').single('file'), async (req, res,
     }
     const user = await User.findById(userId);
     if (!user) return res.sendStatus(404);
-    user.imageurl = `${url}/${file.path}`.replace(/\\/g,"/");
-    await user.save();
+
+    const cloudPath =  `${file.path}`.replace(/\\/g,"/")
+    await cloudinary.uploader.upload(cloudPath, { folder: "cinema/"},)
+            .then((result) => {
+              user.image = result.url
+              user.save();
+            })
     res.send({ user, file });
   } catch (e) {
     console.log(e);
